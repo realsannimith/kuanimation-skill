@@ -1,0 +1,32 @@
+# Local credentials and signing material
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+id_rsa*
+id_ed25519*
+credentials.json
+service-account*.json
+
+# Dependencies and local environments
+node_modules/
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.cache/
+
+# Generated film output and temporary voice batches
+out/
+**/audio/batch-*.wav
+
+# Editor and operating-system files
+.DS_Store
+.idea/
+.vscode/
+*.log
+npm-debug.log*

@@ -1,0 +1,61 @@
+[
+ {"scene": "intro", "lines": [
+  ["សួស្ដីកូនចៅទាំងអស់គ្នា! តាឈ្មោះ តាសុខ។", null, "Hello, children! I'm Grandpa Sok."],
+  ["ថ្ងៃនេះ តានឹងនិទានរឿងអង្គរ", null, "Today I'll tell you the story of Angkor:"],
+  ["រឿងនៃការរីកចម្រើន និងការដួលរលំ នៃអាណាចក្រខ្មែរ។", null, "the rise and the fall of the Khmer Empire."]]},
+ {"scene": "funan", "lines": [
+  ["កាលពីជិតពីរពាន់ឆ្នាំមុន នៅមាត់សមុទ្រ មាននគរមួយឈ្មោះ ហ្វូណន។", null, "Nearly two thousand years ago, by the sea, there was a kingdom called Funan."],
+  ["នាវាពីឥណ្ឌា និងចិន នាំយកទំនិញ សាសនា និងអក្សរមកជាមួយ។", null, "Ships from India and China brought goods, religions and writing."],
+  ["ក្រោយមក នគរចេនឡា បានសង់ប្រាសាទឥដ្ឋ នៅសំបូរព្រៃគុក។", null, "Later, the kingdom of Chenla built brick temples at Sambor Prei Kuk."],
+  ["ប៉ុន្តែទឹកដី បានបែកជានគរតូចៗជាច្រើន។", null, "But the land broke apart into many small kingdoms."]]},
+ {"scene": "kulen", "lines": [
+  ["នៅឆ្នាំប្រាំបីរយពីរ នៅលើភ្នំគូលេន", "នៅឆ្នាំ ៨០២ នៅលើភ្នំគូលេន", "In 802, on Phnom Kulen,"],
+  ["ព្រះបាទជ័យវរ្ម័នទីពីរ បានប្រកាសខ្លួនជាស្ដេចលើស្ដេចទាំងពួង។", "ព្រះបាទជ័យវរ្ម័នទី២ បានប្រកាសខ្លួនជាស្ដេចលើស្ដេចទាំងពួង។", "King Jayavarman II declared himself king of kings."],
+  ["ទឹកដីខ្មែរ បានរួបរួមជាអាណាចក្រតែមួយ។", null, "The Khmer lands became one empire."]]},
+ {"scene": "water", "lines": [
+  ["ប្រហែលឆ្នាំប្រាំបួនរយ ព្រះបាទយសោវរ្ម័នទីមួយ បានសង់រាជធានីនៅអង្គរ។", "ប្រហែលឆ្នាំ ៩០០ ព្រះបាទយសោវរ្ម័នទី១ បានសង់រាជធានីនៅអង្គរ។", "Around 900, King Yasovarman I built a capital at Angkor."],
+  ["គេជីកបារាយណ៍ធំៗ ដើម្បីស្តុកទឹកភ្លៀង។", null, "People dug huge reservoirs, the barays, to store the rain."],
+  ["ទឹកហូរតាមប្រឡាយ ទៅស្រោចស្រពវាលស្រែ។", null, "Canals carried the water to the rice fields."],
+  ["ស្រូវកាន់តែច្រើន មនុស្សក៏កាន់តែច្រើន ហើយអង្គរក្លាយជាទីក្រុងធំបំផុតមួយ នៃពិភពលោក។", null, "More rice meant more people, and Angkor became one of the biggest cities in the world."]]},
+ {"scene": "build", "lines": [
+  ["នៅឆ្នាំមួយពាន់មួយរយដប់បី ព្រះបាទសូរ្យវរ្ម័នទីពីរ ចាប់ផ្ដើមសាងសង់អង្គរវត្ត។", "នៅឆ្នាំ ១១១៣ ព្រះបាទសូរ្យវរ្ម័នទី២ ចាប់ផ្ដើមសាងសង់អង្គរវត្ត។", "In 1113, King Suryavarman II began building Angkor Wat."],
+  ["ថ្មភក់រាប់លានដុំ ត្រូវបានកាត់ពីភ្នំគូលេន", null, "Millions of sandstone blocks were cut on Phnom Kulen,"],
+  ["ហើយដឹកមកតាមក្បូន និងដំរី។", null, "and brought by raft and by elephant."],
+  ["ការងារនេះ ប្រើពេលជិតសាមសិបឆ្នាំ។", null, "The work took almost thirty years."],
+  ["កំពូលទាំងប្រាំ តំណាងឱ្យភ្នំព្រះសុមេរុ ជាលំនៅរបស់ទេវតា។", null, "Its five towers stand for Mount Meru, the home of the gods."]]},
+ {"scene": "churn", "lines": [
+  ["នៅលើជញ្ជាំង ជាងចម្លាក់បានឆ្លាក់រឿង ការកូរសមុទ្រទឹកដោះ។", null, "On its walls, carvers told the Churning of the Ocean of Milk."],
+  ["ពីពពុះទឹកដោះនោះ អប្សរាបានកើតមក", null, "From its foam, the apsaras were born,"],
+  ["ហើយពួកនាងនៅតែរាំ រហូតដល់សព្វថ្ងៃ។", null, "and they are still dancing today."]]},
+ {"scene": "cham", "lines": [
+  ["ប៉ុន្តែនៅឆ្នាំមួយពាន់មួយរយចិតសិបប្រាំពីរ កងទ័ពជើងទឹកចាម បានវាយលុកតាមបឹងទន្លេសាប។", "ប៉ុន្តែនៅឆ្នាំ ១១៧៧ កងទ័ពជើងទឹកចាម បានវាយលុកតាមបឹងទន្លេសាប។", "But in 1177, a Cham fleet attacked across the Great Lake."],
+  ["រាជធានីត្រូវបានដុតបំផ្លាញ។", null, "The capital was burned."]]},
+ {"scene": "jaya", "lines": [
+  ["ព្រះបាទជ័យវរ្ម័នទីប្រាំពីរ បានវាយបណ្ដេញពួកចាម ចេញពីទឹកដីខ្មែរ។", "ព្រះបាទជ័យវរ្ម័នទី៧ បានវាយបណ្ដេញពួកចាម ចេញពីទឹកដីខ្មែរ។", "King Jayavarman VII drove the Cham out of the Khmer lands."],
+  ["ទ្រង់សាងសង់អង្គរធំ និងប្រាសាទបាយ័ន ដែលមានមុខញញឹមប្រហែលពីររយ។", null, "He built Angkor Thom and the Bayon, with about two hundred smiling faces."],
+  ["ទ្រង់ក៏សាងមន្ទីរពេទ្យមួយរយពីរ និងផ្ទះសំណាក់មួយរយម្ភៃមួយ តាមផ្លូវ។", "ទ្រង់ក៏សាងមន្ទីរពេទ្យ ១០២ និងផ្ទះសំណាក់ ១២១ តាមផ្លូវ។", "He also built 102 hospitals and 121 rest houses along the roads."],
+  ["អាណាចក្រខ្មែរ ឡើងដល់កំពូលនៃភាពរុងរឿង។", null, "The Khmer Empire reached its height."]]},
+ {"scene": "zhou", "lines": [
+  ["នៅឆ្នាំមួយពាន់ពីររយកៅសិបប្រាំមួយ អ្នកការទូតចិនម្នាក់ឈ្មោះ ជីវ តាក្វាន់ បានមកដល់អង្គរ។", "នៅឆ្នាំ ១២៩៦ អ្នកការទូតចិនម្នាក់ឈ្មោះ ជីវ តាក្វាន់ បានមកដល់អង្គរ។", "In 1296, a Chinese envoy named Zhou Daguan came to Angkor."],
+  ["គាត់ឃើញព្រះរាជាគង់លើខ្នងដំរី ក្រោមឆត្រសជាច្រើន", null, "He saw the king riding an elephant under many white parasols,"],
+  ["និងផ្សារ ដែលស្ត្រីជាអ្នកលក់ដូរ។", null, "and markets where women did the trading."]]},
+ {"scene": "faith", "lines": [
+  ["នៅសតវត្សទីដប់បួន ព្រះពុទ្ធសាសនាថេរវាទ បានរីកសាយពាសពេញប្រទេស។", "នៅសតវត្សទី១៤ ព្រះពុទ្ធសាសនាថេរវាទ បានរីកសាយពាសពេញប្រទេស។", "In the 14th century, Theravada Buddhism spread across the land."],
+  ["គេលែងសាងសង់ប្រាសាទថ្មធំៗទៀតហើយ។", null, "No more great stone temples were built."]]},
+ {"scene": "drought", "lines": [
+  ["បន្ទាប់មក អាកាសធាតុបានប្រែប្រួល។", null, "Then the climate changed."],
+  ["គ្រោះរាំងស្ងួតរាប់សិបឆ្នាំ ធ្វើឱ្យបារាយណ៍រីងស្ងួត", null, "Decades of drought dried up the barays,"],
+  ["ហើយទឹកជំនន់ដ៏ខ្លាំង បានបំផ្លាញប្រឡាយទឹក។", null, "and violent floods wrecked the canals."]]},
+ {"scene": "ayutthaya", "lines": [
+  ["នៅខាងលិច នគរអយុធ្យា កាន់តែមានកម្លាំងខ្លាំង។", null, "In the west, the kingdom of Ayutthaya grew strong."],
+  ["នៅឆ្នាំមួយពាន់បួនរយសាមសិបមួយ ពួកគេបានវាយយកអង្គរ។", "នៅឆ្នាំ ១៤៣១ ពួកគេបានវាយយកអង្គរ។", "In 1431, it captured Angkor."],
+  ["ព្រះរាជាខ្មែរ បានផ្លាស់រាជធានីទៅចតុមុខ គឺភ្នំពេញសព្វថ្ងៃ។", null, "The Khmer kings moved the capital to Chaktomuk, today's Phnom Penh."]]},
+ {"scene": "forest", "lines": [
+  ["ព្រៃឈើ បានគ្របដណ្ដប់ប្រាសាទជាច្រើន។", null, "The forest covered many temples."],
+  ["ប៉ុន្តែអង្គរមិនដែលបាត់បង់ទេ", null, "But Angkor was never lost:"],
+  ["ព្រះសង្ឃ នៅតែគង់ និងបួងសួង នៅអង្គរវត្តរហូតមក។", null, "monks have always lived and prayed at Angkor Wat."]]},
+ {"scene": "today", "lines": [
+  ["សព្វថ្ងៃ អង្គរវត្ត ស្ថិតនៅលើទង់ជាតិកម្ពុជា។", null, "Today, Angkor Wat is on the flag of Cambodia."],
+  ["អាណាចក្របានដួលរលំ ប៉ុន្តែខ្មែរនៅតែរស់", null, "The empire fell, but the Khmer people live on,"],
+  ["ហើយរឿងរ៉ាវនេះ ជារបស់យើងទាំងអស់គ្នា។ អរគុណកូនចៅ!", null, "and this story belongs to all of us. Thank you, children!"]]}
+]

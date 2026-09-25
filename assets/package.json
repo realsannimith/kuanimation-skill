@@ -1,0 +1,7 @@
+{
+  "name": "drawtale-film",
+  "private": true,
+  "type": "module",
+  "description": "Offline renderer for a drawtale film (headless Chrome + ffmpeg)",
+  "dependencies": {"puppeteer-core": "^24.0.0"}
+}

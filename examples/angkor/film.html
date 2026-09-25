@@ -1,0 +1,39 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Angkor · The Rise and Fall of the Khmer Empire</title>
+<style>body{margin:0;background:#1b1712;display:grid;place-items:center;min-height:100vh}canvas{max-width:100vw;max-height:100vh}</style>
+<canvas id="c"></canvas>
+<script src="drawtale.js"></script>
+<script src="brush.js"></script>
+<script src="stage.js"></script>
+<script src="cast.js"></script>
+<script src="props.js"></script>
+<script src="action.js"></script>
+<script src="director.js"></script>
+<script src="voice.js"></script>
+<script src="scenes.js"></script>
+<script src="score.js"></script>
+<script>
+'use strict';
+/* BRIEF
+Subject:   the rise and fall of the Khmer Empire, for children and general viewers.
+Storytelling: action — the players act it out; Grandpa Sok (តាសុខ) is an unseen
+           Khmer voice-over. For presenter mode pass narrator: grandpa (and add gx marks).
+Voice:     tts_gemini.py --voice Bodi --style "A warm, gentle Khmer grandfather telling a
+           history story to children. Speak Khmer, unhurried and clear, with kindness."
+Look:      wash (default watercolour, indigo rain at night); style: 'haze', 'paper' or 'marker' for the other looks.
+Subtitles: Khmer (spoken) over English.
+Duration:  ~5 min from 45 lines; holds added where scenery needs time (build, cham, jaya).
+Scenes:    intro, funan, kulen, water, build, churn, cham, jaya, zhou, faith, drought,
+           ayutthaya, forest, today (+ end card). See scenes.js.
+Facts:     common scholarly accounts; dates approximate where historians differ.
+*/
+const PLAY = buildPlay(SCENES, {
+  narrator: null,
+  style: 'wash',
+  frame: 'stage',
+  end: endCard([{text: 'អង្គរ', font: FONT.khmer, size: 150, color: T.red, y: 440}, {text: 'The Rise and Fall of the Khmer Empire', size: 46, y: 600}, {text: 'Told by Grandpa Sok · តាសុខ', size: 30, color: '#6b5242', y: 680}, {text: 'Dates follow common scholarly accounts; some remain debated.', italic: true, size: 24, color: '#6b5242', y: 736}]),
+});
+const qs = new URLSearchParams(location.search);
+defineFilm({fps: 24, timeline: PLAY, score: typeof score === 'function' && !qs.has('noscore') ? score : null});
+</script>
