@@ -58,21 +58,23 @@ function paperPattern(c) {
 function texture(c, path, k = .55) { c.save(); c.clip(path); c.globalCompositeOperation = 'multiply'; c.globalAlpha *= k; resetT(c); c.fillStyle = paperPattern(c); c.fillRect(0, 0, W, H); c.restore(); }
 // ---------- styles ----------
 // Every shape and stroke goes through sh() and mk(), so one switch restyles the
-// whole film. 'wash' (default): flat colour with a light watercolour mottle and a thin
+// whole film. 'pencil' (default): coloured-pencil hatching and sketchy graphite lines
+// on drawing paper. 'wash': flat colour with a light watercolour mottle and a thin
 // ink outline, over soft outline-free watercolour scenery. 'haze': a painted
 // animation-background look, muted sage and dusty earth, flat colour with a soft cel
 // shade (lit from the upper right) and a thin warm-brown ink line, over misty layered
-// forests. 'paper': torn-edge coloured paper with real drop shadows, no outlines.
+// 'paper': torn-edge coloured paper with real drop shadows, no outlines.
 // 'marker': thick felt-tip outlines.
-let STYLE = 'wash', INK = '#1d1a1c', LINE = 5.2;
+let STYLE = 'pencil', INK = '#3a3835', LINE = 5.2;
 const STYLES = {
   wash: {ink: '#1d1a1c', line: 5.2, font: '"Chalkboard SE", "Comic Neue", "Avenir Next", sans-serif'},
   haze: {ink: '#3a3024', line: 5.2, font: '"Avenir Next", "Trebuchet MS", "Helvetica Neue", sans-serif'},
   paper: {ink: '#3a2a22', line: 5.2, font: '"Avenir Next", Avenir, "Helvetica Neue", sans-serif'},
   marker: {ink: '#1b1512', line: 5.2, font: FONT.serif},
+  pencil: {ink: '#3a3835', line: 5.2, font: '"Noteworthy", "Chalkboard SE", "Comic Neue", cursive'},
 };
 function useStyle(name) { if (!STYLES[name]) throw new Error(`unknown style "${name}"`); STYLE = name; INK = STYLES[name].ink; LINE = STYLES[name].line; FONT.ui = STYLES[name].font; if (typeof T !== 'undefined' && typeof PALETTES !== 'undefined') Object.assign(T, PALETTES[name]); }
-FONT.ui = STYLES.wash.font;
+FONT.ui = STYLES.pencil.font;
 
 // Deckled paper edge: the outline is nudged in and out along its length. The pattern
 // follows arc length, not position, so a moving cut-out keeps the same torn edge.
@@ -115,6 +117,7 @@ function celShade(c, p, q, k = 1) {
 }
 // sh: a cut-out shape. Options: w (outline width, marker style), tex, line, al, color, lift (shadow depth, paper style).
 function sh(c, pts, fill, {w = LINE, tex = true, line = true, al = 1, color = INK, lift = 1} = {}) {
+  if (STYLE === 'pencil') return pencilSh(c, pts, fill, {w, tex, line, al, color});
   if (STYLE === 'haze') {
     const q = curve(pts, true), p = polyPath(q, true);
     c.save(); c.globalAlpha *= al;
@@ -150,6 +153,7 @@ function sh(c, pts, fill, {w = LINE, tex = true, line = true, al = 1, color = IN
 // mk: an open stroke. Paper style: a narrow paper strip (ink-dark details are drawn
 // finer, like cut dark card); marker style: a felt-tip line.
 function mk(c, pts, {w = LINE, color = INK, al = 1, close = false, raw = false} = {}) {
+  if (STYLE === 'pencil') { pencilMk(c, pts, {w, color, al, close, raw}); return; }
   if (STYLE === 'haze') { inkLine(c, pts, {w: w * .5, color, al: al * .92, close, raw, v: .16}); return; }
   if (STYLE === 'wash') { inkLine(c, pts, {w: w * .62, color, al, close, raw, v: .1}); return; }
   if (STYLE === 'paper') {
@@ -167,4 +171,93 @@ function pin(c, p, r = 4.2) {
   c.save(); c.shadowColor = 'rgba(58,36,20,.35)'; c.shadowBlur = 2 * S; c.shadowOffsetX = 1 * S; c.shadowOffsetY = 1.5 * S;
   const g = c.createRadialGradient(p[0] - r * .35, p[1] - r * .35, r * .1, p[0], p[1], r); g.addColorStop(0, '#fff1b8'); g.addColorStop(.5, '#d9a93e'); g.addColorStop(1, '#8a6120');
   c.fillStyle = g; c.beginPath(); c.arc(p[0], p[1], r, 0, TAU); c.fill(); c.restore();
+}
+
+// ---------- pencil: graphite and coloured pencil on drawing paper ----------
+// Fills are coloured-pencil hatching (a light even layer, then directional strokes of
+// the same colour, graphite cross-hatching on the side away from the light, and the
+// paper's tooth showing through). Outlines are two sketchy graphite passes that
+// overshoot a little. BOIL (set per frame by the director) re-seeds the jitter a few
+// times a second, so lines "boil" gently like hand-drawn animation.
+let BOIL = 0;
+const _hatch = new Map();
+// hatchPattern: short parallel pencil strokes in one colour, tiled seamlessly.
+function hatchPattern(c, col, {dens = 1, ang = -.95, len = 26, seed = 11} = {}) {
+  const key = `${col}|${dens}|${ang}|${len}|${seed}`;
+  if (!_hatch.has(key)) {
+    const N = 192, cv = document.createElement('canvas'); cv.width = cv.height = N; const g = cv.getContext('2d'), r = rng(seed);
+    g.strokeStyle = col; g.lineCap = 'round';
+    for (let i = 0; i < 430 * dens; i++) { const x = r() * N, y = r() * N, l = len * (.55 + r() * .8), a = ang + (r() - .5) * .14, dx = Math.cos(a) * l / 2, dy = Math.sin(a) * l / 2;
+      g.globalAlpha = .22 + r() * .5; g.lineWidth = .8 + r() * 1.3;
+      for (const ox of [-N, 0, N]) for (const oy of [-N, 0, N]) { g.beginPath(); g.moveTo(x - dx + ox, y - dy + oy); g.lineTo(x + dx + ox, y + dy + oy); g.stroke(); } }
+    _hatch.set(key, cv);
+  }
+  return c.createPattern(_hatch.get(key), 'repeat');
+}
+// Paper tooth: pale specks where the pencil skips over the grain.
+let _tooth = null;
+function toothPattern(c) {
+  if (!_tooth) { const cv = document.createElement('canvas'); cv.width = cv.height = 160; const g = cv.getContext('2d'), r = rng(73);
+    for (let i = 0; i < 1500; i++) { g.fillStyle = `rgba(252,249,242,${.3 + r() * .6})`; g.fillRect(r() * 160, r() * 160, .8 + r() * 1.8, .6 + r() * 1.1); }
+    _tooth = cv; }
+  return c.createPattern(_tooth, 'repeat');
+}
+// Graphite: the stroke colour broken by tiny gaps, so lines look drawn, not vector.
+const _graph = new Map();
+function graphitePattern(c, col) {
+  if (!_graph.has(col)) { const cv = document.createElement('canvas'); cv.width = cv.height = 96; const g = cv.getContext('2d'), r = rng(19);
+    g.fillStyle = col; g.fillRect(0, 0, 96, 96); g.globalCompositeOperation = 'destination-out';
+    for (let i = 0; i < 900; i++) { g.fillStyle = `rgba(0,0,0,${.2 + r() * .6})`; g.fillRect(r() * 96, r() * 96, .7 + r() * 1.4, .7 + r() * 1.2); }
+    _graph.set(col, cv); }
+  return c.createPattern(_graph.get(col), 'repeat');
+}
+// jitterLine: a polyline nudged sideways by a slow wobble; ext lengthens both ends (overshoot).
+function jitterLine(q, amp, seed, ext = 0) {
+  const L = cumLen(q), n = q.length, out = [];
+  for (let i = 0; i < n; i++) { const a = q[Math.max(0, i - 1)], b = q[Math.min(n - 1, i + 1)], d = norm(sub(b, a)), o = amp * (wobble(L[i] / 38, seed) * .75 + wobble(L[i] / 9, seed + 3) * .25); out.push([q[i][0] - d[1] * o, q[i][1] + d[0] * o]); }
+  if (ext > 0 && n > 1) { const d0 = norm(sub(out[0], out[1])), d1 = norm(sub(out[n - 1], out[n - 2])); out.unshift(add(out[0], mul(d0, ext))); out.push(add(out[out.length - 1], mul(d1, ext))); }
+  return out;
+}
+function strokePts(c, q) { c.beginPath(); q.forEach((p, i) => i ? c.lineTo(p[0], p[1]) : c.moveTo(p[0], p[1])); c.stroke(); }
+// pencilLine: two graphite passes, the second lighter, looser and overshooting.
+function pencilLine(c, q, {w = LINE, color = INK, al = 1, close = false} = {}) {
+  if (q.length < 2 || al <= 0) return;
+  const L = cumLen(q), T_ = L[L.length - 1]; if (T_ < .5) return;
+  const seed = (q.length * 7 + Math.round(T_ / 12)) % 997 + BOIL * 13, lw = clamp(w * .42, .9, 4.2), amp = Math.min(1.5, .35 + T_ / 400);
+  let base = q; if (close) { const k = Math.max(2, Math.round(q.length * .06)); base = [...q, ...q.slice(1, k)]; }
+  c.save(); c.lineCap = 'round'; c.lineJoin = 'round'; c.strokeStyle = graphitePattern(c, color);
+  c.globalAlpha *= al * .9; c.lineWidth = lw; strokePts(c, jitterLine(base, amp, seed));
+  c.globalAlpha *= .5; c.lineWidth = lw * .6; strokePts(c, jitterLine(base, amp * 1.9 + .6, seed + 41, close ? 0 : Math.min(9, T_ * .06)));
+  c.restore();
+}
+// pencilFill: coloured-pencil layers inside path p (bbox from points q).
+function pencilFill(c, p, q, fill, al = 1, tex = true) {
+  const [x, y, w, h] = bbox(q), col = typeof fill === 'string' ? fill : null, box = () => c.fillRect(x - 4, y - 4, w + 8, h + 8);
+  const A = c.globalAlpha * al; c.save(); c.clip(p);
+  if (col) { const lum = parseColor(col).reduce((a, b) => a + b) / 765;
+    c.globalAlpha = A * (lum > .8 ? .55 : .5); c.fillStyle = col; box();
+    c.globalAlpha = A; c.fillStyle = hatchPattern(c, shade(col, .06), {dens: lum < .35 ? 1.6 : 1.1}); box(); }
+  else { c.globalAlpha = A * .62; fill(c, p, q); c.globalAlpha = A * .5; c.fillStyle = hatchPattern(c, '#8f887e', {dens: .6}); box(); }
+  if (tex && Math.min(w, h) > 6) {   // form shading: cross-hatch the crescent away from the upper-left light
+    const d = clamp(Math.min(w, h) * .2, 2.5, 34), cut = new Path2D(); cut.rect(x - 60, y - 60, w + 120, h + 120); cut.addPath(p, new DOMMatrix().translate(-d, -d * 1.15));
+    c.save(); c.clip(cut, 'evenodd'); c.globalAlpha = A * .5; c.fillStyle = hatchPattern(c, '#4a4640', {dens: .75, ang: .7, len: 20, seed: 23}); box(); c.restore(); }
+  c.globalAlpha = A * .8; c.fillStyle = toothPattern(c); box();
+  c.restore();
+}
+function pencilSh(c, pts, fill, {w, tex, line, al, color}) {
+  const q = curve(pts, true), p = polyPath(q, true);
+  if (fill) pencilFill(c, p, q, fill, al, tex);
+  if (line && w > 0) pencilLine(c, q, {w, color, al, close: true});
+  return p;
+}
+// Thick coloured strokes become a band of coloured pencil; dark or thin ones a graphite line.
+function pencilMk(c, pts, {w, color, al, close, raw}) {
+  const q = raw ? pts : curve(pts, close);
+  if (w > 7 && color !== INK) { c.save(); c.globalAlpha *= al; c.lineCap = 'round'; c.lineJoin = 'round'; c.lineWidth = w; c.strokeStyle = color; c.globalAlpha *= .45; strokePts(c, q); c.globalAlpha /= .45; c.strokeStyle = hatchPattern(c, shade(color, .08), {dens: 1.3}); strokePts(c, q); c.restore(); return; }
+  pencilLine(c, q, {w, color: color === INK || parseColor(color).reduce((a, b) => a + b) < 200 ? INK : color, al, close});
+}
+// scribble: a looping pencil scribble filling an ellipse (bushes, dirt, shading).
+function scribble(c, x, y, rx, ry, {n = 7, col = INK, al = .5, w = 1.4, seed = 1} = {}) {
+  const r = rng(seed), pts = []; for (let k = 0; k <= n * 14; k++) { const a = k / 14 * TAU * 1.03, rr_ = .45 + .55 * Math.abs(Math.sin(k * .37 + r() * .2)); pts.push([x + Math.cos(a) * rx * rr_ + (k / (n * 14) - .5) * rx * .6, y + Math.sin(a) * ry * rr_]); }
+  c.save(); c.globalAlpha *= al; c.strokeStyle = graphitePattern(c, col); c.lineWidth = w; c.lineJoin = 'round'; strokePts(c, smoothLine(pts, 4, false)); c.restore();
 }

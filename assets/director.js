@@ -54,10 +54,10 @@ function dipCut(c, tau, dur, a = .5) { const k = Math.max(1 - clamp(tau / a, 0, 
 
 // buildPlay: scenes (+ VOICE when present) -> timeline, plus voice cues for the mixer.
 //   narrator  null (default: action storytelling) or a presenter function like `grandpa`
-//   style     'wash' (default: sunny watercolour landscape, full frame; indigo rain at night), 'haze' (hazy painted animation background, misty forests), 'paper' (Paper
+//   style     'pencil' (default: 2D pencil sketch on paper, cut-away soil), 'wash' (sunny watercolour landscape, full frame; indigo rain at night), 'haze' (hazy painted animation background, misty forests), 'paper' (Paper
 //             Diorama) or 'marker' (felt-tip outlines, red curtains)
 //   frame     'stage' (the style's frame and ground; default) or 'full' (full-bleed, dip cuts)
-function buildPlay(SCENES, {narrator = null, frame = 'stage', style = 'wash', startX = -160, subtitles = true, end = null} = {}) {
+function buildPlay(SCENES, {narrator = null, frame = 'stage', style = 'pencil', startX = -160, subtitles = true, end = null} = {}) {
   useStyle(style);
   const PLAY = []; let prevX = startX; const voices = typeof VOICE === 'undefined' ? [] : VOICE;
   for (const sc of SCENES) {
@@ -66,6 +66,7 @@ function buildPlay(SCENES, {narrator = null, frame = 'stage', style = 'wash', st
     S.beats = i => S.lines.length ? S.lines[Math.min(i, S.lines.length - 1)].t0 : (sc.beats?.[i] ?? i * 2);
     const px = prevX, camera = sc.camera || DEFAULT_CAMERA;
     const fn = (c, tau) => {
+      BOIL = Math.floor(tau * 8);
       typeof sc.mood === 'function' ? sc.mood(c, tau, S) : stageBack(c, sc.mood || 'warm');
       c.save(); applyCamera(c, camera(tau, S));
       if (frame === 'stage') stageFloor(c, typeof sc.mood === 'string' ? sc.mood : 'warm');

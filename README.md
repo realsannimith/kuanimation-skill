@@ -1,6 +1,6 @@
 # Kuanimation skill
 
-Kuanimation is an [Agent Skill](https://agentskills.io/specification) for making illustrated animated stories and explainers. It includes a Canvas drawing runtime, a film template, an offline renderer and mixer, optional text-to-speech scripts, and a complete Angkor example. The skill name is **`kuanimation`**; install the repository in a directory with that name so agents can discover it.
+Kuanimation is an [Agent Skill](https://agentskills.io/specification) for making illustrated animated stories and explainers. It includes a Canvas drawing runtime with five looks (a 2D pencil sketch by default, plus watercolour, hazy painted forest, paper diorama and felt-tip marker), a film template, an offline renderer and mixer, optional text-to-speech scripts, and two complete examples: Angkor (watercolour, Khmer voice-over) and the life cycle of a sunflower (pencil sketch, captions and music). The skill name is **`kuanimation`**; install the repository in a directory with that name so agents can discover it.
 
 The example includes its voice clips, so you can preview and rebuild it **without an API key**. A Gemini API key is needed only if you choose to generate new speech with Gemini TTS. Microsoft Edge TTS is another option.
 
@@ -65,7 +65,7 @@ node mix.mjs film.html
 node render.mjs film.html
 ```
 
-The final film is `out/film-final.mp4`. The full render takes longer than the preview. See [the example guide](examples/angkor/README.md) and [the skill instructions](SKILL.md) to make your own film.
+The final film is `out/film-final.mp4`. For the pencil-sketch example, copy `examples/sunflower/` instead of `examples/angkor/`; it needs no voice files at all. The full render takes longer than the preview. See [the example guide](examples/angkor/README.md) and [the skill instructions](SKILL.md) to make your own film.
 
 ## Keep credentials out of Git
 

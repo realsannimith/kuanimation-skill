@@ -13,12 +13,13 @@
 `curve(pts,close)` (third value 1 = corner) · `cutAt(q,u)` · `profile(keys)` · `strip(pts,widthFn)` ·
 `sh(c,pts,fill,{w,tex,line,al,color})` filled cut-out with outline · `mk(c,pts,{w,color,al,close})` open stroke ·
 `inkLine` low level · `vgrad(top,bottom) hgrad(a,b)` fill functions · `texture(c,path,k)` · `INK LINE` defaults ·
-`useStyle('wash'|'haze'|'paper'|'marker')` · `celShade(c,path,q,k)` haze shading · `mottle(c,path,k)` watercolour grain · `STYLE` · `deckle(q,amp)` torn edge · `pin(c,[x,y],r)` brass split-pin (paper only) · `sh(...,{lift})` shadow depth.
+`useStyle('pencil'|'wash'|'haze'|'paper'|'marker')` (default pencil) · `celShade(c,path,q,k)` haze shading · `mottle(c,path,k)` watercolour grain · `STYLE` · `deckle(q,amp)` torn edge · `pin(c,[x,y],r)` brass split-pin (paper only) · `sh(...,{lift})` shadow depth ·
+pencil: `hatchPattern(c,col,{dens,ang,len,seed})` coloured-pencil strokes · `graphitePattern(c,col)` · `toothPattern(c)` paper grain · `pencilLine(c,pts,{w,color,al,close})` · `jitterLine(q,amp,seed,ext)` · `scribble(c,x,y,rx,ry,{n,col,al,w,seed})` · `BOIL` line-boil seed (set per frame by the director).
 
 ## stage.js
-`T` palette (set from `PALETTES.wash|haze|paper|marker` by `useStyle`) · `WASH_MOODS` · `HAZE_MOODS` · `MOODS` (paper, marker) · `STG {floorY:760}` ·
+`T` palette (set from `PALETTES.wash|haze|pencil|paper|marker` by `useStyle`) · `WASH_MOODS` · `HAZE_MOODS` · `PENCIL_MOODS` · `MOODS` (paper, marker) · `STG {floorY:760}` ·
 `stageBack(c,mood)` · `stageFloor(c,mood)` · `stageFront(c,open)` frame + scene transition · `subtitle(c,l1,l2,u,al,{font1,font2})` (line 1 in any language: the style's lettering with script-font fallback) ·
-wash: `washLandscape(mood,seed)` `washGround` `softFade` `washSubtitle` `pool(g,pts,col)` · haze: `hazeLandscape(mood,seed)` `hazeGround` `hazeFront(c,open)` `clump(g,x,y,r,{base,lit,dk,inkAl,lw,seed})` `canopyBand(g,{y0,y1,r0,r1,base,haze,glow,k,seed,roll})` · paper: `paperLandscape(mood,seed)` `paperGround` `shadowBox` `tearShutter(c,open)` · marker: `washLayer` `sideCurtains` `valance` `mainCurtain`.
+wash: `washLandscape(mood,seed)` `washGround` `softFade` `washSubtitle` `pool(g,pts,col)` · haze: `hazeLandscape(mood,seed)` `hazeGround` `hazeFront(c,open)` `clump(g,x,y,r,{base,lit,dk,inkAl,lw,seed})` `canopyBand(g,{y0,y1,r0,r1,base,haze,glow,k,seed,roll})` · pencil: `pencilLandscape(mood,seed)` `pencilGround(c,mood)` (grass + cut-away soil) `pencilFront(c,open)` `pencilSubtitle` `hatchRect(g,col,x,y,w,h,al,o)` · paper: `paperLandscape(mood,seed)` `paperGround` `shadowBox` `tearShutter(c,open)` · marker: `washLayer` `sideCurtains` `valance` `mainCurtain`.
 Characters stand on y ≈ 760..1060 (front of stage ≈ 900–1030).
 
 ## cast.js
@@ -30,7 +31,9 @@ A new narrator is a function with `grandpa`'s signature; pass it as `buildPlay(S
 ## props.js
 `waveRoller(c,y,t,{col,dk,amp,ph,h})` · `signBoard(c,x,y,w,h,text,{font,size,fill,col,drop})` · `onStick(c,x,y,draw,p)` ·
 general: `sunBurst cloudT palmT treeT stiltHouse mountainT boatT shipT fireT crocT confetti throneT blockT hangingMap(c,x,y,w,h,drop,draw(g,w,h))` ·
-from the Angkor example: `budTower angkorFlat bayonT brickTowerT buddhaT gateT flagT` (Cambodia's flag).
+from the Angkor example: `budTower angkorFlat bayonT brickTowerT buddhaT gateT flagT` (Cambodia's flag) ·
+lettering and pointers (any style, made for pencil): `handText(c,text,x,y,size,reveal,{col,al,align,halo})` written-on handwriting · `arrowT(c,a,b,u,{bow,w})` bowed arrow drawing itself on · `pathArrow(c,pts,u,{w})` arrow along any path · `sparkle(c,x,y,s,al)`.
+The sunflower example's `flora.js` adds `seedT rootT shootT plantT headT beeT birdT canProp UMBRELLA HATS.sunhat`.
 
 ## action.js
 `travel(tau,t0,t1,a,b,ease)` → [x,y] · `hop(tau,t0,t1,a,b,h)` arc jump · `stepPhase(x,stride)` walk phase from distance ·
@@ -41,7 +44,7 @@ from the Angkor example: `budTower angkorFlat bayonT brickTowerT buddhaT gateT f
 
 ## director.js
 `timing(V,{pre,post,holds})` · `speaking(S,tau)` → `{i,l,u,amp}` · `L_(S)(i)` line start · `pop(tau,t0,d)` · `rise(c,p,draw)` ·
-`buildPlay(SCENES,{narrator=null,style='wash'|'haze'|'paper'|'marker',frame='stage'|'full',subtitles,end})` → timeline (+ `window.DT.cues`) · `endCard(lines,{dur})` ·
+`buildPlay(SCENES,{narrator=null,style='pencil'|'wash'|'haze'|'paper'|'marker',frame='stage'|'full',subtitles,end})` → timeline (+ `window.DT.cues`) · `endCard(lines,{dur})` ·
 `DEFAULT_CAMERA` slow push-in · `applyCamera(c,{x,y,zoom,dx,dy})` · `dipCut` · `performNarrator` (presenter mode).
 Scene fields: `name mood set(c,tau,S) holds pre post dur beats camera captions curtainOpen`; presenter-only: `gx gy gs dir gestures special`.
 `S.beats(i)` = start of voice line i (or `beats[i]` for a voiceless scene).

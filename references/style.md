@@ -1,9 +1,60 @@
-# The look (default: `wash`)
+# The look (default: `pencil`, a 2D pencil sketch)
+
+A children's science-book drawing: graphite and coloured pencil on warm drawing paper,
+everything visibly hand-drawn, a garden bed cut away below the grass so the viewer sees
+the soil in section. It is the look of every film unless the user asks for another, and it
+suits any subject: build the world from the moods and props, and draw anything new with
+`sh`/`mk` so it matches.
+
+**Paper and sky.** `stageBack(c, mood)` lays a warm paper sheet with faint fibres, then
+the sky as loose, low-angle coloured-pencil hatching that fades to bare paper toward the
+horizon. Clouds are paper left unhatched inside a light graphite outline. Two hill bands
+are hatched in greens with a sketched ridge line; bushes are hatched blobs with a pencil
+scribble. Night hatches the sky densely in indigo and graphite with paper-white stars.
+
+**Ground.** `stageFloor` draws a grass band with upward tick strokes and a sketched edge,
+and below it a cut-away soil bed: brown hatching in two directions, darker with depth,
+outlined pebbles, specks and faint worm tracks. Seeds, roots and burrowing creatures can
+be drawn inside it; zoom the camera in (`zoom` 2–2.5 on y ≈ 800) for underground scenes.
+
+**Characters and props.** `sh` fills a shape in three coloured-pencil layers (a light even
+pass, directional strokes of the same colour, graphite cross-hatching on the side away from
+the upper-left light) with the paper's tooth showing through, then outlines it with two
+sketchy graphite passes that overshoot a little. `mk` is a graphite line; a thick coloured
+`mk` becomes a band of coloured pencil. `BOIL` re-seeds the line wobble eight times a
+second, so outlines boil gently like hand-drawn animation (the director sets it). The sun
+is a hatched yellow disc with short sketched rays.
+
+**Words.** Captions are graphite handwriting (Noteworthy, falling back to Chalkboard SE)
+written on from the left with a paper halo, no box. In-picture words use
+`handText(c, text, x, y, size, reveal)`; labels point with `arrowT` or `pathArrow`.
+
+**Transitions.** A soft vignette at the page edges; scenes fade through blank paper.
+
+**Moods.** `PENCIL_MOODS` = `[paper, sky pencil, far hills, near hills, soil]` for `warm
+dawn green gold dust storm night` and `paper` (a nearly blank page with faint hills, for
+diagrams and title cards).
+
+**Palette.** Soft coloured pencils: sky `#a9cde6`, `green #88bb6a`, `greenDk #5a8f4e`,
+`yellow #f5c93a`, `orange #e89150`, `red #d9695a`, `blue #7fa7d0`, `teal #5fa7a3`, `brown
+#8d6748`, soil `floor #b89c7c`, graphite ink `#3a3835`. Use the names in `T`.
+
+## Quality gates (pencil)
+- Every edge looks drawn: no flat vector fills, no hard perfect outlines (use `sh`/`mk`,
+  `handText`, `pathArrow`, never raw `fillText` or `stroke` for visible things).
+- Sky hatching stays light and low-angle so it never reads as rain; add real rain with
+  `rain(c, tau, {col: '#6f95b8'})` only when it rains.
+- The backdrop is not zoomed: if the camera zooms, check that no blank band of paper opens
+  between the hills and the ground.
+- Captions readable over the soil; the bottom 150 px stays free of key action.
+- Players ≈ 240 px tall on the grass line (y 760); colour stays soft, one strong accent
+  (yellow flowers, a red umbrella) per scene.
+
+## Alternative: `style: 'wash'` (watercolour cartoon)
 
 A simple watercolour cartoon in an open landscape, full frame, no stage: sunny by day,
-deep indigo and rainy at night. It is the look of every film unless the user asks for
-another (the alternatives follow below), and it suits any subject: build the world from
-the moods and props, and draw anything new with `sh`/`mk` so it matches.
+deep indigo and rainy at night. Use it only when the user asks for watercolour (the Angkor
+example uses it); like every look it suits any subject.
 
 **Scenery (no outlines).** `stageBack(c, mood)` paints a watercolour sky (soft gradient
 and faint pigment blooms), pale soft clouds, a cream horizon band, two layers of rolling
@@ -38,7 +89,7 @@ eased breakdowns (`span`, `keys`, `pop`); walking is `walk: phase`; scenery pops
 from behind the ground (`rise`), drops on strings (`signBoard`) or comes up on a stick
 (`onStick`). The camera push is anchored near the top so signs stay in frame.
 
-## Quality gates (wash)
+### Wash quality gates
 - Outlines only on characters and props; sky, clouds, sun, hills and road have none.
 - Smooth washes: no repeating blotch pattern, no hard-edged colour bands in the sky.
 - Players ≈ 250 px tall at 1080p, standing on the road (y ≈ 760–900); key action in

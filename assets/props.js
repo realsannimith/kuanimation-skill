@@ -28,6 +28,10 @@ function onStick(c, x, y, draw, p = 1) {
   c.save(); c.translate(x, yy); draw(c); c.restore();
 }
 function sunBurst(c, x, y, r, t, {col = T.yellow, rays = true} = {}) {
+  if (STYLE === 'pencil') {   // a hatched yellow disc, short sketchy rays that turn slowly
+    if (rays) for (let k = 0; k < 14; k++) { const a = k / 14 * TAU + t * .12, j = .9 + .2 * hash(k, 4); mk(c, [[x + Math.cos(a) * r * 1.22, y + Math.sin(a) * r * 1.22], [x + Math.cos(a) * r * (1.45 + .25 * j), y + Math.sin(a) * r * (1.45 + .25 * j)]], {w: 4, color: T.goldDk}); }
+    sh(c, circ(x, y, r, 30), col, {w: LINE}); return;
+  }
   if (STYLE === 'wash' || STYLE === 'haze') {   // a flat disc, a soft glow and a paler highlight: no rays, no outline
     glowLight(c, x, y, r * 2.4, '#fff3c4', .55);
     c.save(); c.fillStyle = col; c.beginPath(); c.arc(x, y, r, 0, TAU); c.fill(); c.restore(); mottle(c, polyPath(circ(x, y, r, 40)), .25);
@@ -209,3 +213,27 @@ function gateT(c, x, y, s, grow, t) {
   }
   c.restore();
 }
+
+// ---------- hand lettering, arrows, sparkles (made for the pencil style, work in any) ----------
+function handText(c, s, x, y, size, reveal = 1, {col = '#2f2d2a', al = 1, align = 'center', halo = true} = {}) {
+  if (reveal <= 0 || al <= 0) return;
+  c.save(); c.globalAlpha *= al; c.font = `${size}px ${FONT.ui}`; c.textAlign = 'left'; c.textBaseline = 'alphabetic';
+  const w = c.measureText(s).width, x0 = align === 'center' ? x - w / 2 : align === 'right' ? x - w : x;
+  c.beginPath(); c.rect(x0 - 10, y - size * 1.3, (w + 20) * clamp(reveal, 0, 1), size * 2); c.clip();
+  if (halo) { c.shadowColor = '#f6f1e5'; c.shadowBlur = size * .4 * S; c.fillStyle = '#f6f1e5'; c.fillText(s, x0, y); c.shadowBlur = 0; }
+  c.fillStyle = graphitePattern(c, col); c.fillText(s, x0, y); c.restore();
+}
+// arrowT: a pencil arrow from a to b that draws itself on (u 0..1), slightly bowed.
+function arrowT(c, a, b, u, {bow = .18, w = 4} = {}) {
+  if (u <= 0) return;
+  const m = lerp2(a, b, .5), d = sub(b, a), mid = [m[0] - d[1] * bow, m[1] + d[0] * bow], q = smoothLine([a, mid, b], 4);
+  const r = cutAt(q, clamp(u / .8, 0, 1)); if (r.length > 1) mk(c, r, {w, raw: true});
+  if (u > .8) { const k = clamp((u - .8) / .2, 0, 1), e = q[q.length - 1], dir = norm(sub(e, q[q.length - 4])), L = 16 * k;
+    mk(c, [add(e, mul(rot(dir, 2.6), L)), e, add(e, mul(rot(dir, -2.6), L))], {w, raw: true}); }
+}
+// pathArrow: a pencil stroke along any path q that draws itself on, with an arrowhead.
+function pathArrow(c, q, u, {w = 4.4} = {}) {
+  if (u <= 0) return; const r = cutAt(q, clamp(u / .85, 0, 1)); if (r.length > 1) mk(c, r, {w, raw: true});
+  if (u > .85) { const k = clamp((u - .85) / .15, 0, 1), e = q[q.length - 1], dir = norm(sub(e, q[Math.max(0, q.length - 5)])), L = 18 * k; mk(c, [add(e, mul(rot(dir, 2.6), L)), e, add(e, mul(rot(dir, -2.6), L))], {w, raw: true}); }
+}
+function sparkle(c, x, y, s = 1, al = 1) { if (al <= 0) return; for (const a of [0, Math.PI / 2]) mk(c, [[x - Math.cos(a) * 14 * s, y - Math.sin(a) * 14 * s], [x + Math.cos(a) * 14 * s, y + Math.sin(a) * 14 * s]], {w: 3.4, al, color: T.goldDk}); }

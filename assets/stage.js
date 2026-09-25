@@ -1,5 +1,6 @@
 'use strict';
-// The stage in four looks. 'wash' (default): an open watercolour landscape, full frame:
+// The stage in five looks. 'pencil' (default, see the end of this file): graphite and
+// coloured pencil on drawing paper with a cut-away soil bed. 'wash': an open watercolour landscape, full frame:
 // by day a sky, soft clouds, cream horizon, rolling hills and a sandy road; at night an
 // indigo sky, faintly outlined clouds, a dark bush band and a blue-grey ground; outlined
 // players on outline-free scenery; plain hand-lettered subtitles; soft fades.
@@ -10,6 +11,8 @@
 // box, layered torn-paper landscapes, a paper ground, a torn sheet that sweeps down
 // between scenes, and subtitles on a taped paper strip with a highlighter swipe.
 // 'marker': red curtains, tiled floor, watercolour blooms, a slate subtitle bar.
+// 'pencil' (default): graphite and coloured pencil on drawing paper: hatched sky, sketched hills,
+// a cut-away soil bed under the grass line, handwritten captions, fades through paper.
 
 const PALETTES = {};
 PALETTES.marker = {
@@ -65,7 +68,23 @@ const HAZE_MOODS = {
   dust: ['#c9b594', '#eee2cc', '#9a9468', '#b88c62', '#fbe8c8'], night: ['#16222e', '#2e4254', '#2c433e', '#3c464c', '#9fb8d0'],
   storm: ['#36424c', '#66737c', '#3d544e', '#56574f', '#c8d0d6'], fire: ['#301c28', '#84402f', '#3c3830', '#573a30', '#ffae6a'],
 };
-const T = {...PALETTES.wash};
+// Coloured pencils on drawing paper: soft, light, a little chalky.
+PALETTES.pencil = {
+  ol: '#3a3835',
+  curtain: '#d9735a', curtainDk: '#b85a44', gold: '#eab54a', goldDk: '#c48f2a',
+  floor: '#b89c7c', floorDk: '#8e7458', skin: '#f1c9a6', skinDk: '#d3a07c', white: '#fbf8f1',
+  red: '#d9695a', orange: '#e89150', pink: '#eca4b1', blue: '#7fa7d0', navy: '#4f5f8a', teal: '#5fa7a3',
+  green: '#88bb6a', greenDk: '#5a8f4e', yellow: '#f5c93a', brown: '#8d6748', grey: '#aaa7a1', greyDk: '#77736d',
+  stone: '#d9c7a4', stoneDk: '#ae9a74', saffron: '#f0a13c', purple: '#8674ae', sky: '#a9cde6', water: '#7fbad8', waterDk: '#4f8db0',
+};
+// Per mood: [paper, sky pencil, far hills, near hills, soil]; a fifth truthy flag = plain page.
+const PENCIL_MOODS = {
+  warm: ['#f6f1e5', '#a9cfe9', '#b9d3a0', '#98c47c', '#b99b79'], dawn: ['#f7f0e4', '#f2c3aa', '#c6cf9c', '#a3c47e', '#bb9c7a'],
+  green: ['#f4f1e4', '#a3d0e2', '#a9cf94', '#86bd6c', '#b49876'], gold: ['#f7f0e1', '#f4d796', '#cdcb8a', '#aac273', '#bb9a74'],
+  dust: ['#f5eee0', '#e9c99a', '#cdbf8e', '#b9b07a', '#b8966f'], storm: ['#f1eee6', '#a7afbd', '#a6b89a', '#90ae82', '#ac9476'],
+  night: ['#efebe1', '#56628a', '#7c8a86', '#6e8470', '#9a8670'], paper: ['#f6f1e5', '#c9dfee', '#d2e0c2', '#bcd4a8', '#c2a888', true],
+};
+const T = {...PALETTES.pencil};
 // ---------- watercolour backdrops ----------
 const MOODS = {
   warm: ['#f6e7c8', '#f2b8a8', '#f5d27a', '#f0a07a'], dawn: ['#f7e6cf', '#f4b3b8', '#f8d38a', '#e9a0b8'],
@@ -76,6 +95,7 @@ const MOODS = {
   storm: ['#cfd6db', '#8ea3b3', '#a9b8c2', '#6f8596'], forest: ['#e6eccf', '#8fbf7f', '#c9de9a', '#6fa26a'],
 };
 function washLayer(mood, seed = 1) {
+  if (STYLE === 'pencil') return pencilLandscape(mood, seed);
   if (STYLE === 'haze') return hazeLandscape(mood, seed);
   if (STYLE === 'wash') return washLandscape(mood, seed);
   if (STYLE === 'paper') return paperLandscape(mood, seed);
@@ -98,6 +118,7 @@ function washLayer(mood, seed = 1) {
 const STG = {floorY: 760, x0: 150, x1: 1770, top: 44};
 function stageFloor(c, mood) {
   if (STYLE === 'haze') return hazeGround(c, mood);
+  if (STYLE === 'pencil') return pencilGround(c, mood);
   if (STYLE === 'wash') return washGround(c, mood);
   if (STYLE === 'paper') return paperGround(c, mood);
   const fy = STG.floorY, vx = W / 2, vy = 120;
@@ -147,7 +168,7 @@ function stageBack(c, mood, seed = 1) {
   BACK_DARK = !!sky && parseColor(sky[0]).reduce((a, b) => a + b) < 300;
   resetT(c); blitS(c, washLayer(mood, seed));
 }
-function stageFront(c, open = 1) { resetT(c); if (STYLE === 'haze') hazeFront(c, open); else if (STYLE === 'wash') softFade(c, open); else if (STYLE === 'paper') { tearShutter(c, open); shadowBox(c); } else { sideCurtains(c); valance(c); mainCurtain(c, open); } }
+function stageFront(c, open = 1) { resetT(c); if (STYLE === 'pencil') pencilFront(c, open); else if (STYLE === 'haze') hazeFront(c, open); else if (STYLE === 'wash') softFade(c, open); else if (STYLE === 'paper') { tearShutter(c, open); shadowBox(c); } else { sideCurtains(c); valance(c); mainCurtain(c, open); } }
 
 // ---------- Hazy painted animation (haze) ----------
 // A canopy clump: a scalloped cauliflower of leaves, lit from the upper right, shaded
@@ -371,6 +392,7 @@ function subtitle(c, l1, l2, u, a = 1, {font1 = null, font2 = null} = {}) {
   if (a <= 0) return;
   font2 = font2 || (STYLE === 'marker' ? FONT.serif : FONT.ui);
   font1 = font1 || (/[\u1780-\u17ff\u19e0-\u19ff]/.test(l1) ? FONT.khmer : lineFont(font2));
+  if (STYLE === 'pencil') return pencilSubtitle(c, l1, l2, u, a, font1, font2);
   if (STYLE === 'wash' || STYLE === 'haze') return washSubtitle(c, l1, l2, u, a, font1, font2);
   resetT(c); c.save(); c.globalAlpha = a;
   const f1 = `34px ${font1}`, f2 = STYLE === 'paper' ? `600 29px ${font2}` : `italic 600 29px ${font2}`;
@@ -407,5 +429,93 @@ function washSubtitle(c, l1, l2, u, a, font1, font2) {
   const y2 = H - 58, y1 = l2 ? y2 - 50 : y2;
   row(l1, `34px ${font1}`, y1, 34, u);
   if (l2) row(l2, `600 32px ${font2}`, y2, 32, u);
+  c.restore();
+}
+
+// ---------- Pencil sketch (pencil) ----------
+// A drawing-paper page: coloured-pencil sky hatched in loose strokes that fade toward
+// the horizon, paper-white clouds left unhatched with a light graphite outline, two
+// sketched hill bands with scribbled bushes, and a cut-away garden bed below the grass
+// line (soil hatching, pebbles, worm tracks) so seeds and roots can be seen growing.
+const PAPER = () => (PENCIL_MOODS.warm)[0];
+function hatchRect(g, col, x, y, w, h, al, o = {}) { g.save(); g.globalAlpha = al; g.fillStyle = hatchPattern(g, col, o); g.fillRect(x, y, w, h); g.restore(); }
+function pencilLandscape(mood, seed = 1) {
+  return sprite('pencil-' + mood + seed, [0, 0, W, H], g => {
+    const [paper, skyC, far, near, , plain] = PENCIL_MOODS[mood] || PENCIL_MOODS.warm, r = rng(seed * 19 + 5), night = mood === 'night';
+    g.fillStyle = paper; g.fillRect(0, 0, W, H);
+    g.save(); g.globalCompositeOperation = 'multiply'; g.globalAlpha = .28; g.fillStyle = paperPattern(g); g.fillRect(0, 0, W, H); g.restore();
+    // Clouds: paper left white inside a light graphite outline.
+    const clouds = []; for (let i = 0; i < 3; i++) { const cx = 240 + i * 640 + r() * 180, cy = 120 + r() * 150, w = 300 + r() * 180, n = 4 + (r() * 3 | 0), top = [];
+      const lobes = []; for (let k = 0; k < n; k++) { const u = (k + .5) / n; lobes.push([cx - w / 2 + u * w, w / n * (.7 + r() * .4) * (.65 + .5 * Math.sin(u * Math.PI))]); }
+      for (let x = cx - w / 2 - 30; x <= cx + w / 2 + 30; x += 8) { let y = cy; for (const [mx, rad] of lobes) { const d = x - mx; if (Math.abs(d) < rad) y = Math.min(y, cy - Math.sqrt(rad * rad - d * d) * .7); } top.push([x, y]); }
+      const t = top.filter(q => q[1] < cy - 1); if (t.length > 2) clouds.push([...t, [t[t.length - 1][0] - 10, cy + 6], [t[0][0] + 10, cy + 6]]); }
+    if (!plain) {
+      // Sky: loose hatching, heavier at the top, clouds cut out.
+      g.save(); const cut = new Path2D(); cut.rect(0, 0, W, 640); for (const cl of clouds) cut.addPath(polyPath(smoothLine(cl, 6, true), true)); g.clip(cut, 'evenodd');
+      hatchRect(g, skyC, 0, 0, W, 640, night ? .95 : .5, {dens: night ? 1.8 : .8, ang: -.38, len: 40, seed: 11});
+      hatchRect(g, shade(skyC, .06), 0, 0, W, 640, night ? .5 : .16, {dens: .7, ang: -.2, len: 46, seed: 12});
+      if (night) hatchRect(g, '#3a3835', 0, 0, W, 520, .35, {dens: 1, ang: .6, seed: 5});
+      g.restore();
+      g.save(); const fade = g.createLinearGradient(0, 0, 0, 620); fade.addColorStop(0, alpha(paper, 0)); fade.addColorStop(.3, alpha(paper, .12)); fade.addColorStop(1, alpha(paper, .92)); g.fillStyle = fade; g.fillRect(0, 0, W, 640); g.restore();
+    }
+    for (const cl of clouds) { g.save(); g.globalAlpha = plain ? .25 : .5; g.strokeStyle = graphitePattern(g, INK); g.lineWidth = 1.6; g.lineJoin = 'round'; strokePts(g, jitterLine(smoothLine(cl.slice(0, -2), 6, false), 1.2, seed + clouds.indexOf(cl), 6)); g.restore(); }
+    if (night) for (let i = 0; i < 40; i++) { const x = r() * W, y = r() * 420, s = 3 + r() * 5; g.save(); g.strokeStyle = alpha('#fffdf6', .9); g.lineWidth = 1.6; g.beginPath(); g.moveTo(x - s, y); g.lineTo(x + s, y); g.moveTo(x, y - s); g.lineTo(x, y + s); g.stroke(); g.restore(); }
+    // Hills: hatched bands with a sketched ridge line, bushes as scribbles.
+    const hill = (y0, amp, col, k, al) => { const pts = [[-60, H]]; for (let x = -60; x <= W + 60; x += 40) pts.push([x, y0 - amp * (.5 + .5 * Math.sin(x / (420 - k * 110) + seed * 2 + k * 1.9)) - 8 * wobble(x / 70, seed + k)]); pts.push([W + 60, H]);
+      const p = polyPath(pts, true); g.save(); g.clip(p); hatchRect(g, col, 0, 300, W, H - 300, al, {dens: 1.1, ang: -.35 - k * .3, len: 30, seed: 31 + k}); g.globalAlpha = .5; g.fillStyle = toothPattern(g); g.fillRect(0, 300, W, H - 300); g.restore();
+      g.save(); g.globalAlpha = .55; g.strokeStyle = graphitePattern(g, INK); g.lineWidth = 1.5; g.lineJoin = 'round'; strokePts(g, jitterLine(pts.slice(1, -1), 1.4, seed + k * 5)); g.restore(); };
+    hill(590, 70, far, 0, plain ? .35 : .6); hill(680, 60, near, 1, plain ? .4 : .75);
+    if (!plain) for (let i = 0; i < 9; i++) { const x = 40 + r() * (W - 80), y = 650 + r() * 70, s = 18 + r() * 22; g.save(); g.globalAlpha = .8; g.strokeStyle = graphitePattern(g, '#7a6a55'); g.lineWidth = 2.5; g.beginPath(); g.moveTo(x, y); g.lineTo(x + 1, y - s * 1.2); g.stroke(); g.restore(); g.save(); g.fillStyle = hatchPattern(g, shade(near, .12), {dens: 1.6, ang: -1.2, len: 16}); g.globalAlpha = .9; g.beginPath(); g.ellipse(x, y - s * 1.6, s * 1.05, s * .85, 0, 0, TAU); g.fill(); g.restore(); scribble(g, x, y - s * 1.6, s * 1.1, s * .9, {n: 4, col: shade(near, .45), al: .5, w: 1.4, seed: seed * 31 + i}); }
+  });
+}
+function pencilGround(c, mood = 'warm') {
+  const m = PENCIL_MOODS[mood] || PENCIL_MOODS.warm, soil = m[4], grass = m[3], fy = STG.floorY;
+  const sp = sprite('pencilground-' + mood, [-400, fy - 40, W + 800, H + 440 - fy], g => {
+    const r = rng(61), edge = []; for (let x = -400; x <= W + 400; x += 30) edge.push([x, fy + 3 * wobble(x / 90, 4)]);
+    const body = polyPath([...edge, [W + 400, H + 400], [-400, H + 400]], true);
+    g.save(); g.fillStyle = m[0]; g.fill(body); g.clip(body);
+    // Soil: a light even layer, strokes in two directions, deeper toward the bottom.
+    g.globalAlpha = .35; g.fillStyle = soil; g.fillRect(-400, fy, W + 800, H + 400 - fy);
+    hatchRect(g, shade(soil, .1), -400, fy, W + 800, H + 400 - fy, .6, {dens: 1.2, len: 24, seed: 41});
+    hatchRect(g, shade(soil, .16), -400, fy, W + 800, H + 400 - fy, .3, {dens: .8, ang: -.6, len: 22, seed: 42});
+    g.globalAlpha = 1; const deep = g.createLinearGradient(0, fy, 0, H); deep.addColorStop(0, alpha(shade(soil, .2), 0)); deep.addColorStop(1, alpha(shade(soil, .2), .28)); g.fillStyle = deep; g.fillRect(-400, fy, W + 800, H + 400 - fy);
+    g.globalAlpha = .6; g.fillStyle = toothPattern(g); g.fillRect(-400, fy, W + 800, H + 400 - fy); g.globalAlpha = 1;
+    // Pebbles and specks, a few worm tracks.
+    for (let i = 0; i < 70; i++) { const x = -380 + r() * (W + 760), y = fy + 40 + r() * 330, rx = 3 + r() * 11, ry = rx * (.55 + r() * .3), q = ell(x, y, rx, ry, 12, r() * 3);
+      g.save(); g.globalAlpha = .85; g.fillStyle = hatchPattern(g, i % 3 ? '#9d9488' : '#c8b89e', {dens: 1.4}); g.fill(polyPath(q, true)); g.strokeStyle = graphitePattern(g, INK); g.lineWidth = 1.3; g.globalAlpha = .7; strokePts(g, [...q, q[0]]); g.restore(); }
+    g.save(); g.strokeStyle = graphitePattern(g, INK); g.globalAlpha = .35; g.lineWidth = 1.2;
+    for (let i = 0; i < 160; i++) { const x = -380 + r() * (W + 760), y = fy + 20 + r() * 350; g.beginPath(); g.moveTo(x, y); g.lineTo(x + 3 + r() * 5, y + (r() - .5) * 3); g.stroke(); }
+    for (let i = 0; i < 5; i++) { const x = -200 + r() * (W + 400), y = fy + 120 + r() * 220, pts = []; for (let k = 0; k < 8; k++) pts.push([x + k * 22, y + 10 * Math.sin(k * 1.3 + i)]); g.globalAlpha = .28; g.lineWidth = 3; strokePts(g, smoothLine(pts, 4)); }
+    g.restore(); g.restore();
+    // Grass: a green band along the top with upward tick strokes and a sketched edge.
+    const band = polyPath([...edge, ...edge.slice().reverse().map(([x, y]) => [x, y + 16 + 6 * Math.abs(wobble(x / 50, 8))])], true);
+    g.save(); g.clip(band); hatchRect(g, grass, -400, fy - 10, W + 800, 40, .9, {dens: 1.6, ang: -1.35, len: 16, seed: 8}); g.restore();
+    g.save(); g.strokeStyle = graphitePattern(g, shade(grass, .45)); g.lineCap = 'round';
+    for (let i = 0; i < 520; i++) { const x = -390 + r() * (W + 780), y = fy + 4 + r() * 10, h = 8 + r() * 16, lean = (r() - .5) * 8; g.globalAlpha = .45 + r() * .4; g.lineWidth = 1 + r() * .8; g.beginPath(); g.moveTo(x, y); g.quadraticCurveTo(x + lean * .3, y - h * .6, x + lean, y - h); g.stroke(); }
+    g.restore();
+    g.save(); g.globalAlpha = .75; g.strokeStyle = graphitePattern(g, INK); g.lineWidth = 2; strokePts(g, jitterLine(edge, 1.2, 3)); g.restore();
+  }, 1);
+  blitS(c, sp);
+}
+// A soft darkening at the page edges, and scene changes that fade through blank paper.
+function pencilFront(c, open) {
+  resetT(c); c.save();
+  const v = c.createRadialGradient(W / 2, H / 2, H * .42, W / 2, H / 2, W * .72); v.addColorStop(0, 'rgba(90,80,62,0)'); v.addColorStop(1, 'rgba(90,80,62,.22)'); c.fillStyle = v; c.fillRect(0, 0, W, H);
+  c.restore();
+  if (open < 1) { c.save(); c.globalAlpha = 1 - easeInOutSine(clamp(open, 0, 1)); c.fillStyle = PAPER(); c.fillRect(0, 0, W, H); c.globalCompositeOperation = 'multiply'; c.globalAlpha *= .3; c.fillStyle = paperPattern(c); c.fillRect(0, 0, W, H); c.restore(); }
+}
+// Pencil captions: graphite handwriting that writes itself on from the left, a paper halo.
+function pencilSubtitle(c, l1, l2, u, a, font1, font2) {
+  resetT(c); c.save(); c.globalAlpha = a; c.textAlign = 'left';
+  const reveal = clamp(u * 5, 0, 1);
+  const row = (s, font, y, size) => {
+    c.font = font; const w = c.measureText(s).width, x = W / 2 - w / 2;
+    c.save(); c.beginPath(); c.rect(x - 10, y - size * 1.3, (w + 20) * reveal, size * 2); c.clip();
+    c.shadowColor = 'rgba(248,244,234,1)'; c.shadowBlur = 16; c.fillStyle = '#f6f1e5'; c.fillText(s, x, y); c.fillText(s, x, y); c.shadowBlur = 0;
+    c.fillStyle = graphitePattern(c, '#2f2d2a'); c.fillText(s, x, y); c.restore();
+  };
+  const y2 = H - 52, y1 = l2 ? y2 - 50 : y2;
+  row(l1, `42px ${font1}`, y1, 42);
+  if (l2) row(l2, `34px ${font2}`, y2, 34);
   c.restore();
 }

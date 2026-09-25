@@ -1,0 +1,40 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>The Life of a Sunflower</title>
+<style>body{margin:0;background:#1b1712;display:grid;place-items:center;min-height:100vh}canvas{max-width:100vw;max-height:100vh}</style>
+<canvas id="c"></canvas>
+<script src="kuanimation.js"></script>
+<script src="brush.js"></script>
+<script src="stage.js"></script>
+<script src="cast.js"></script>
+<script src="props.js"></script>
+<script src="action.js"></script>
+<script src="director.js"></script>
+<script src="flora.js"></script>
+<script src="voice.js" onerror="window.VOICE=[]"></script>
+<script src="scenes.js"></script>
+<script src="score.js"></script>
+<script>
+'use strict';
+/* BRIEF
+Subject:            The life cycle of a sunflower (seed, germination, seedling, growth, bud and
+                    heliotropism, bloom and florets, pollination by bees, seeds, the cycle again),
+                    for children and general viewers.
+Language:           English captions only.
+Storytelling:       action: a gardener, a sleepy seed, bees and a finch act it out.
+Style:              pencil (added for this film): graphite outlines and coloured-pencil hatching
+                    on drawing paper, a cut-away garden bed, handwritten captions.
+Frame:              stage
+Voice-over:         none: captions + a gentle synthesised score.
+Duration target:    120 s (ten scenes, 114 s, plus a 6 s end page).
+Scenes:             title · plant · sprout (underground) · seedling · grow · bud · bloom · bees · seeds · cycle
+*/
+const PLAY = buildPlay(SCENES, {
+  narrator: null,          // action storytelling; set to `grandpa` for a presenter
+  style: 'pencil',         // graphite + coloured pencil on paper (see brush.js / stage.js)
+  frame: 'stage',
+  end: END,
+});
+const qs = new URLSearchParams(location.search);
+defineFilm({fps: 24, timeline: PLAY, score: typeof score === 'function' && !qs.has('noscore') ? score : null});
+</script>

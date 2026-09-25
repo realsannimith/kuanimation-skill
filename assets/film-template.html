@@ -12,7 +12,7 @@
 <script src="director.js"></script>
 <script src="voice.js" onerror="window.VOICE=[]"></script>
 <script src="scenes.js"></script>
-<script src="score.js"></script>
+<script src="score.js" onerror="/* optional: no score */"></script>
 <script>
 'use strict';
 /* BRIEF
@@ -20,8 +20,9 @@ Subject:            (what the story shows, who it is for)
 Language:           (the voice's language; subtitle line 1 in it, optional line 2 a translation)
 Storytelling:       action (default: players act it out, unseen voice-over + subtitles)
                     | presenter (an on-screen narrator such as `grandpa`)
-Style:              wash (default: watercolour landscape by day, indigo rain at night)
-                    | haze (hazy painted forests) | paper (Paper Diorama) | marker (felt-tip + curtains)
+Style:              pencil (default: 2D pencil sketch, graphite + coloured pencil on paper)
+                    | wash (watercolour landscape, indigo rain at night) | haze (hazy painted forests)
+                    | paper (Paper Diorama) | marker (felt-tip + curtains)
 Frame:              stage (the style's frame and ground, default) | full (full-bleed pictures)
 Voice-over:         tts_gemini.py (voice, style) | tts_edge.py (voice) | none (captions only)
 Duration target:    (comes from the lines + holds; check after the first render)
@@ -30,7 +31,7 @@ Sources/licences:   (facts, any external media)
 */
 const PLAY = buildPlay(SCENES, {
   narrator: null,          // action storytelling; set to `grandpa` for a presenter
-  style: 'wash',           // watercolour (indigo rain at night); 'haze' hazy painted animation; 'paper' Paper Diorama; 'marker' felt-tip + curtains
+  style: 'pencil',         // pencil sketch on paper; 'wash' watercolour (indigo rain at night); 'haze' hazy painted animation; 'paper' Paper Diorama; 'marker' felt-tip + curtains
   frame: 'stage',
   end: endCard([{text: 'The End', size: 96, color: T.gold}, {text: 'Made with Kuanimation', italic: true, size: 30}]),
 });

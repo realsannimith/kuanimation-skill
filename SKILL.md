@@ -1,7 +1,7 @@
 ---
 name: kuanimation
 description: >-
-  Make an animated story or explainer video in a simple watercolour cartoon style (full-frame landscapes, soft skies and rolling hills by day; deep indigo nights with faintly outlined clouds, a dark bush band, a blue-grey ground, falling rain and glowing lamps; simple characters with thin ink outlines and flat colour; plain hand-lettered subtitles; a hazy painted-forest look is also built in) where the characters act the story out: they walk, react with bubbles and emotes, clash, cheer, while an optional unseen voice-over and subtitles carry the words. Pure JavaScript + Canvas 2D, rendered offline to MP4 with a synthesised score and voice mix; Gemini or Microsoft TTS in any language including Khmer. Use for history/science/product explainers and kids' stories. An on-screen presenter is optional. Not for UI motion, slide decks or realistic animation.
+  Make an animated story or explainer video in a 2D pencil-sketch style (graphite outlines and soft coloured-pencil hatching on warm drawing paper, a hatched sky, sketched hills, a cut-away soil bed so seeds and roots can be seen growing, lines that gently boil like hand-drawn animation, handwritten captions; watercolour, hazy painted-forest, paper-diorama and felt-tip looks are also built in) where the characters act the story out: they walk, react with bubbles and emotes, clash, cheer, while an optional unseen voice-over and subtitles, or captions and music alone, carry the words. Pure JavaScript + Canvas 2D, rendered offline to MP4 with a synthesised score and voice mix; Gemini or Microsoft TTS in any language including Khmer. Use for science/history/product explainers and kids' stories. An on-screen presenter is optional. Not for UI motion, slide decks or realistic animation.
 ---
 
 # Kuanimation
@@ -9,14 +9,17 @@ description: >-
 An animated story about any subject (history, science, a product, a
 kids' story), drawn and painted in code.
 
-**Default look: `wash`**, used for every film unless the user asks for another look: a
-simple watercolour cartoon in open, full-frame landscapes. By day: soft skies and clouds,
-a flat sun, rolling green and teal hills and a sandy road. At night: a deep indigo sky
-with faintly outlined clouds, a dark bush band, a blue-grey ground, falling rain and
-glowing lamps. Characters and props are simple shapes with thin ink outlines and flat
-colour; subtitles are plain hand lettering. Details and quality gates:
-[references/style.md](references/style.md). Other looks, only when asked: `style: 'haze'`
-(hazy painted forests), `'paper'` (Paper Diorama), `'marker'` (felt-tip outlines on a
+**Default look: `pencil`**, used for every film unless the user asks for another look: a
+2D pencil sketch on warm drawing paper. Characters and props have sketchy graphite
+outlines that overshoot a little and gently boil, and soft coloured-pencil fills with
+cross-hatched shading and the paper's grain showing through. The sky is loose, light
+hatching that fades to bare paper; clouds are paper left white; hills are hatched greens
+with scribbled bushes; below the grass line the soil is cut away in section, so seeds,
+roots and burrows can be shown underground. Captions are graphite handwriting written on
+from the left; scenes fade through blank paper. Details and quality gates:
+[references/style.md](references/style.md). Other looks, only when asked: `style: 'wash'`
+(simple watercolour cartoon, sunny landscapes, indigo rainy nights), `'haze'` (hazy
+painted forests), `'paper'` (Paper Diorama), `'marker'` (felt-tip outlines on a
 red-curtain stage).
 
 **Default storytelling: action.** The players show what happens (they travel, build,
@@ -32,7 +35,7 @@ renderer; Python for the voice).
 
 1. **Brief.** Fill the `/* BRIEF */` block in [assets/film-template.html](assets/film-template.html): subject,
    audience, language, voice-over method (or captions only), scene list with the action of
-   each scene. Keep the defaults (action storytelling, `wash` style) unless
+   each scene. Keep the defaults (action storytelling, `pencil` style) unless
    the user asks otherwise; ask only about language and voice service if unknown.
 2. **Project.** Make one folder. Copy everything in `assets/` into it (rename
    `film-template.html` → `film.html`), then `npm i --no-audit --no-fund`. For the voice:
@@ -45,6 +48,8 @@ renderer; Python for the voice).
    for the film's language (`edge-tts --list-voices`; e.g. `en-US-AriaNeural`, `km-KH-PisethNeural`).
    Both write `audio/` and `voice.js` (durations + lip-sync envelopes). Scene lengths
    come from the voice, so do this before timing any action.
+   Wordless films (captions and music, no voice): skip steps 3–4; give each scene `dur`
+   and `captions: [{t0, t1, text}]` and time the action in scene seconds (the sunflower example).
 5. **Stage the action** in `scenes.js` as `SCENES = [{name, mood, holds, camera?, set(c, tau, S)}]`
    using `stage.js`, `cast.js`, `props.js`, `action.js`. Every voice line gets a visible
    event: someone enters, reacts, builds, fights, celebrates. Time it to `L(i)` (start of
@@ -74,9 +79,16 @@ renderer; Python for the voice).
   `palmT`, `stiltHouse`, `boatT`, `shipT`, `signBoard`, `fireT`, …) and draw whatever the
   story needs that is not there (a rocket, a cell, a shop) with `sh`/`mk` so it matches.
   The temple props and `flagT` (Cambodia) belong to the Angkor example.
-- `wash`: thin ink outlines only on characters and props, never on sky, hills, clouds or
+- `wash` (only when asked): thin ink outlines only on characters and props, never on sky, hills, clouds or
   sun; colour from `T` and `WASH_MOODS`; night moods (`night storm fire`) give the indigo
   rain look, add `rain` and `glowLight` for weather and lamps.
+- `pencil` (default): paper, sky hatching, hills and the
+  cut-away soil come from `stageBack`/`stageFloor` (moods `warm dawn green gold dust storm
+  night paper`; `paper` is a near-blank page for diagrams). Characters and props still go
+  through `sh`/`mk`, which turn into coloured-pencil fills and sketchy graphite lines that
+  boil gently. Write words in the picture with `handText`, point with `arrowT`/`pathArrow`.
+  The ground is a cross-section, so roots and seeds can be shown growing under it; zoom the
+  camera into the soil for underground scenes. Study [examples/sunflower/](examples/sunflower/README.md).
 - `haze` (only when asked): scenery comes from `stageBack`/`stageFloor` (never hand-paint a sky); trees are
   `treeT` or `clump`; colour from `T` and `HAZE_MOODS`, muted, one saturated accent at
   most; light and weather with `glowLight` and `rain`.
@@ -87,4 +99,4 @@ renderer; Python for the voice).
 
 - Runtime and drawing: [kuanimation.js](assets/kuanimation.js) · [brush.js](assets/brush.js) · [stage.js](assets/stage.js) · [cast.js](assets/cast.js) · [props.js](assets/props.js) · [action.js](assets/action.js) · [director.js](assets/director.js)
 - Tools: [render.mjs](assets/render.mjs) · [mix.mjs](assets/mix.mjs) · [tts_gemini.py](assets/tts_gemini.py) · [tts_edge.py](assets/tts_edge.py) · [package.json](assets/package.json) · [requirements.txt](assets/requirements.txt)
-- Worked example: [examples/angkor/](examples/angkor/README.md), a complete 5-minute action film in the default look, with a Khmer voice-over, English subtitles and its voice clips.
+- Worked examples: [examples/angkor/](examples/angkor/README.md), a complete 5-minute action film in the watercolour `wash` look, with a Khmer voice-over, English subtitles and its voice clips; [examples/sunflower/](examples/sunflower/README.md), a 2-minute science explainer in the default `pencil` look with captions and music only (no voice), timed with `dur` and `captions`.

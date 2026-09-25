@@ -25,9 +25,10 @@ const browser = await puppeteer.launch({executablePath: chrome, headless: true, 
 let N, fps;
 try {
   const page = await browser.newPage(), errors = [];
-  page.on('pageerror', e => errors.push(String(e))); page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
+  page.on('pageerror', e => errors.push(String(e))); page.on('console', m => { if (m.type() === 'error' && !/Failed to load resource/.test(m.text())) errors.push(m.text()); });   // optional voice.js / score.js may be absent; a missing required script still fails via pageerror
   await page.goto(url.href, {waitUntil: 'load'});
-  await page.waitForFunction('window.DT && (window.DT.ready === true || window.DT.error)', {timeout: 60000});
+  for (const t0 = Date.now(); !(await page.evaluate(() => !!(window.DT && (window.DT.ready === true || window.DT.error))));) {   // fail fast on a script error
+    if (errors.length) throw new Error(errors.join('\n')); if (Date.now() - t0 > 60000) throw new Error('page not ready after 60 s'); await new Promise(r => setTimeout(r, 100)); }
   const meta = await page.evaluate(() => ({N: window.DT.frames, fps: window.DT.fps, size: window.DT.size, error: window.DT.error}));
   if (meta.error || errors.length) throw new Error(meta.error || errors.join('\n'));
   ({N, fps} = meta); console.log(`${name}: ${N} frames, ${fps} fps, ${meta.size.w}x${meta.size.h}, ${(N / fps).toFixed(1)} s`);
