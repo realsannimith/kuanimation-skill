@@ -1,12 +1,12 @@
 ---
-name: drawtale
+name: kuanimation
 description: >-
   Make an animated story or explainer video in a simple watercolour cartoon style (full-frame landscapes, soft skies and rolling hills by day; deep indigo nights with faintly outlined clouds, a dark bush band, a blue-grey ground, falling rain and glowing lamps; simple characters with thin ink outlines and flat colour; plain hand-lettered subtitles; a hazy painted-forest look is also built in) where the characters act the story out: they walk, react with bubbles and emotes, clash, cheer, while an optional unseen voice-over and subtitles carry the words. Pure JavaScript + Canvas 2D, rendered offline to MP4 with a synthesised score and voice mix; Gemini or Microsoft TTS in any language including Khmer. Use for history/science/product explainers and kids' stories. An on-screen presenter is optional. Not for UI motion, slide decks or realistic animation.
 ---
 
-# drawtale
+# Kuanimation
 
-A drawn tale: a short animated film about any subject (history, science, a product, a
+An animated story about any subject (history, science, a product, a
 kids' story), drawn and painted in code.
 
 **Default look: `wash`**, used for every film unless the user asks for another look: a
@@ -85,6 +85,6 @@ renderer; Python for the voice).
 
 ## Files
 
-- Runtime and drawing: [drawtale.js](assets/drawtale.js) · [brush.js](assets/brush.js) · [stage.js](assets/stage.js) · [cast.js](assets/cast.js) · [props.js](assets/props.js) · [action.js](assets/action.js) · [director.js](assets/director.js)
+- Runtime and drawing: [kuanimation.js](assets/kuanimation.js) · [brush.js](assets/brush.js) · [stage.js](assets/stage.js) · [cast.js](assets/cast.js) · [props.js](assets/props.js) · [action.js](assets/action.js) · [director.js](assets/director.js)
 - Tools: [render.mjs](assets/render.mjs) · [mix.mjs](assets/mix.mjs) · [tts_gemini.py](assets/tts_gemini.py) · [tts_edge.py](assets/tts_edge.py) · [package.json](assets/package.json) · [requirements.txt](assets/requirements.txt)
 - Worked example: [examples/angkor/](examples/angkor/README.md), a complete 5-minute action film in the default look, with a Khmer voice-over, English subtitles and its voice clips.

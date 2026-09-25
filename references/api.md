@@ -1,6 +1,6 @@
 # API
 
-## drawtale.js (runtime)
+## kuanimation.js (runtime)
 `W H S TAU` · `lerp clamp lerp2` · `parseColor mix tint shade alpha` · `rng(seed)() hash(k,seed) wobble(x,seed)` ·
 `linear easeIO easeIn easeOut easeInOutSine easeOutExpo easeOutBack` · `span(a,b,t,ease)` 0..1 between times ·
 `keys(t, [[time, value | [values], ease?],…])` · `onTwos(t)` · `smoothLine(pts,step,close)` · `polyPath(pts,close)` · `twoBone(root,target,a,b,bend)` ·

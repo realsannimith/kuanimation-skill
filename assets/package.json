@@ -1,7 +1,7 @@
 {
-  "name": "drawtale-film",
+  "name": "kuanimation-film",
   "private": true,
   "type": "module",
-  "description": "Offline renderer for a drawtale film (headless Chrome + ffmpeg)",
+  "description": "Offline renderer for a kuanimation film (headless Chrome + ffmpeg)",
   "dependencies": {"puppeteer-core": "^24.0.0"}
 }

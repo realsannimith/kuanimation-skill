@@ -1,9 +1,9 @@
 <!doctype html>
 <meta charset="utf-8">
-<title>My drawtale film</title>
+<title>My Kuanimation film</title>
 <style>body{margin:0;background:#1b1712;display:grid;place-items:center;min-height:100vh}canvas{max-width:100vw;max-height:100vh}</style>
 <canvas id="c"></canvas>
-<script src="drawtale.js"></script>
+<script src="kuanimation.js"></script>
 <script src="brush.js"></script>
 <script src="stage.js"></script>
 <script src="cast.js"></script>
@@ -32,7 +32,7 @@ const PLAY = buildPlay(SCENES, {
   narrator: null,          // action storytelling; set to `grandpa` for a presenter
   style: 'wash',           // watercolour (indigo rain at night); 'haze' hazy painted animation; 'paper' Paper Diorama; 'marker' felt-tip + curtains
   frame: 'stage',
-  end: endCard([{text: 'The End', size: 96, color: T.gold}, {text: 'Made with drawtale', italic: true, size: 30}]),
+  end: endCard([{text: 'The End', size: 96, color: T.gold}, {text: 'Made with Kuanimation', italic: true, size: 30}]),
 });
 const qs = new URLSearchParams(location.search);
 defineFilm({fps: 24, timeline: PLAY, score: typeof score === 'function' && !qs.has('noscore') ? score : null});

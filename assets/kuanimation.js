@@ -1,5 +1,5 @@
 'use strict';
-// drawtale runtime. A film is a list of scenes; every frame is a pure function of
+// kuanimation runtime. A film is a list of scenes; every frame is a pure function of
 // its index, so the renderer can draw any frame, in any order, as often as it likes.
 // Logical frame: 1920 x 1080 units; the output size is picked at render time (S scales).
 // Everything the page shares with the renderer lives on window.DT.

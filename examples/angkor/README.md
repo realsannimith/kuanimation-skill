@@ -8,9 +8,9 @@ looks and `narrator: grandpa` the presenter version.
 
 Build it in an empty folder:
 ```bash
-DRAWTALE=/path/to/drawtale        # the folder that holds SKILL.md
-cp -R "$DRAWTALE"/assets/. .
-cp -R "$DRAWTALE"/examples/angkor/. .
+KUANIMATION=/path/to/kuanimation        # the folder that holds SKILL.md
+cp -R "$KUANIMATION"/assets/. .
+cp -R "$KUANIMATION"/examples/angkor/. .
 npm i --no-audit --no-fund
 node mix.mjs film.html && node render.mjs film.html     # -> out/film-final.mp4
 ```

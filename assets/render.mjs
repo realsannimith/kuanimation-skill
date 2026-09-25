@@ -1,4 +1,4 @@
-// drawtale renderer. Frames come from the page's canvas (no screenshots), ffmpeg packs them.
+// kuanimation renderer. Frames come from the page's canvas (no screenshots), ffmpeg packs them.
 //   node render.mjs film.html                 full render -> out/<name>.mp4 (+ -final.mp4 if out/mix.wav exists)
 //   node render.mjs film.html --grid 36       one contact sheet of 36 evenly spaced frames
 //   node render.mjs film.html --strip 480,24  24 consecutive frames from frame 480

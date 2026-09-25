@@ -1,6 +1,6 @@
-# Drawtale animation skill
+# Kuanimation skill
 
-Drawtale is an [Agent Skill](https://agentskills.io/specification) for making illustrated animated stories and explainers. It includes a Canvas drawing runtime, a film template, an offline renderer and mixer, optional text-to-speech scripts, and a complete Angkor example. The skill name is **`drawtale`**; install the repository in a directory with that name so agents can discover it.
+Kuanimation is an [Agent Skill](https://agentskills.io/specification) for making illustrated animated stories and explainers. It includes a Canvas drawing runtime, a film template, an offline renderer and mixer, optional text-to-speech scripts, and a complete Angkor example. The skill name is **`kuanimation`**; install the repository in a directory with that name so agents can discover it.
 
 The example includes its voice clips, so you can preview and rebuild it **without an API key**. A Gemini API key is needed only if you choose to generate new speech with Gemini TTS. Microsoft Edge TTS is another option.
 
@@ -14,10 +14,10 @@ All three discover user skills in `~/.agents/skills/` ([Codex](https://learn.cha
 
 ```bash
 mkdir -p ~/.agents/skills
-git clone https://github.com/realsannimith/kuanimation-skill.git ~/.agents/skills/drawtale
+git clone https://github.com/realsannimith/kuanimation-skill.git ~/.agents/skills/kuanimation
 ```
 
-In Codex, mention `$drawtale` or use `/skills`. In Cursor, search for `drawtale` in the Agent skill menu. In Gemini CLI, run `/skills list`; if a session was already open, run `/skills reload`.
+In Codex, mention `$kuanimation` or use `/skills`. In Cursor, search for `kuanimation` in the Agent skill menu. In Gemini CLI, run `/skills list`; if a session was already open, run `/skills reload`.
 
 ### Claude Code
 
@@ -25,16 +25,16 @@ Claude Code discovers personal skills in `~/.claude/skills/` ([Claude Code docum
 
 ```bash
 mkdir -p ~/.claude/skills
-git clone https://github.com/realsannimith/kuanimation-skill.git ~/.claude/skills/drawtale
+git clone https://github.com/realsannimith/kuanimation-skill.git ~/.claude/skills/kuanimation
 ```
 
-Start Claude Code and use `/drawtale`, or ask it to make an animated story. If you also use the shared installation above, you can link it instead of cloning twice: `ln -s ~/.agents/skills/drawtale ~/.claude/skills/drawtale`.
+Start Claude Code and use `/kuanimation`, or ask it to make an animated story. If you also use the shared installation above, you can link it instead of cloning twice: `ln -s ~/.agents/skills/kuanimation ~/.claude/skills/kuanimation`.
 
 ### Other agents and project installs
 
-For any agent that supports the [Agent Skills format](https://agentskills.io/specification), place the whole repository in that agent's skills directory as `drawtale/`. Keep `SKILL.md`, `assets/`, `references/`, and `examples/` together. Check that agent's documentation for its discovery path and how to refresh skills.
+For any agent that supports the [Agent Skills format](https://agentskills.io/specification), place the whole repository in that agent's skills directory as `kuanimation/`. Keep `SKILL.md`, `assets/`, `references/`, and `examples/` together. Check that agent's documentation for its discovery path and how to refresh skills.
 
-For a project-only installation, clone this repository to `<your-project>/.agents/skills/drawtale` for Codex, Cursor, or Gemini CLI, or to `<your-project>/.claude/skills/drawtale` for Claude Code. If you plan to commit the host project, copy the skill files without the nested `.git` directory or use a Git submodule.
+For a project-only installation, clone this repository to `<your-project>/.agents/skills/kuanimation` for Codex, Cursor, or Gemini CLI, or to `<your-project>/.claude/skills/kuanimation` for Claude Code. If you plan to commit the host project, copy the skill files without the nested `.git` directory or use a Git submodule.
 
 ## Requirements for rendering
 
@@ -75,4 +75,13 @@ The repository includes a staged-file secret check. Enable the hook in a clone w
 
 ## Update
 
-Run `git -C ~/.agents/skills/drawtale pull --ff-only` or `git -C ~/.claude/skills/drawtale pull --ff-only`, according to where you installed it. Restart the agent if it does not show the updated skill.
+Run `git -C ~/.agents/skills/kuanimation pull --ff-only` or `git -C ~/.claude/skills/kuanimation pull --ff-only`, according to where you installed it. Restart the agent if it does not show the updated skill.
+
+If you installed the earlier `drawtale` skill, rename its folder before updating. For a standalone shared installation:
+
+```bash
+mv ~/.agents/skills/drawtale ~/.agents/skills/kuanimation
+git -C ~/.agents/skills/kuanimation pull --ff-only
+```
+
+For a standalone Claude Code installation, use the same commands with `~/.claude/skills/`. If Claude Code used a symlink to the shared installation, replace that symlink with `~/.claude/skills/kuanimation` pointing to `~/.agents/skills/kuanimation`.
